@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<records>
+    {% for item in records %}
+    <item>    	
+    	<vid>{{item.vid}}</vid>
+	    <title>{{item.title}}</title>
+	    <url>{{item.url}}</url>
+	    <thumb>{{item.thumb}}</thumb>
+		<brief>{{item.brief}}</brief>
+		<source>{{item.source}}</source>
+		<loadtime>{{item.loadtime}}</loadtime>
+		<duration>{{item.duration}}</duration>
+		<web>{{item.web}}</web>	
+		<mvid>{{item.mvid}}</mvid>	
+		<mtype>{{item.mtype}}</mtype>		
+		<click>{{item.click}}</click>
+	</item>
+    {% endfor %}
+</records>
