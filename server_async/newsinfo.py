@@ -13,7 +13,7 @@ sys.path.append(r'../related')
 
 import database.tablemerge as tablemerge
 from database.dbconfig import mergetable
-from esa4related import esaclient
+from w2v4related import w2vclient
 # from related import related
 from search import search
 import time
@@ -57,8 +57,7 @@ def getTopRecords(web,mvid,loadtime='0',topnum=10,mtype=None,click=0):
         #11related,12loadtime,13duration,14web,15mvid,16mtype,17click
         #2vid,3title,4url,5thumb,6brief,10source,12loadtime,13duration,14web,15mvid,16mtype,17click
             vnInfos.append(NewsInfo(item[2],item[3],item[4],item[5],item[6],item[10],
-                                    time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(item[12])),
-                                    item[13],item[14],item[15],item[16],item[17]))
+                                    item[12],item[13],item[14],item[15],item[16],item[17]))
     return vnInfos
 
 def getRefreshRecords(web,mvid,loadtime='0',topnum=10,mtype=None,click=0):
@@ -78,8 +77,7 @@ def getRefreshRecords(web,mvid,loadtime='0',topnum=10,mtype=None,click=0):
         #11related,12loadtime,13duration,14web,15mvid,16mtype,17click
         #2vid,3title,4url,5thumb,6brief,10source,12loadtime,13duration,14web,15mvid,16mtype,17click
             vnInfos.append(NewsInfo(item[2],item[3],item[4],item[5],item[6],item[10],
-                                    time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(item[12])),
-                                    item[13],item[14],item[15],item[16],item[17]))
+                                    item[12],item[13],item[14],item[15],item[16],item[17]))
     if len(vnInfos)<int(topnum):
         if mtype == type_new:
             records=tablemerge.getBottomBTRecords(ctable, loadtime,topnum-len(vnInfos))
@@ -90,8 +88,7 @@ def getRefreshRecords(web,mvid,loadtime='0',topnum=10,mtype=None,click=0):
         if records!=-1 and len(records)>0:
             for item in records:
                 vnInfos.append(NewsInfo(item[2],item[3],item[4],item[5],item[6],item[10],
-                                    time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(item[12])),
-                                    item[13],item[14],item[15],item[16],item[17]))
+                                    item[12],item[13],item[14],item[15],item[16],item[17]))
     return vnInfos
 
 def getMoreRecords(web,mvid,loadtime='0',topnum=10,mtype=None,click=0):
@@ -110,8 +107,7 @@ def getMoreRecords(web,mvid,loadtime='0',topnum=10,mtype=None,click=0):
         #11related,12loadtime,13duration,14web,15mvid,16mtype,17click
         #2vid,3title,4url,5thumb,6brief,10source,12loadtime,13duration,14web,15mvid,16mtype,17click
             vnInfos.append(NewsInfo(item[2],item[3],item[4],item[5],item[6],item[10],
-                                    time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(item[12])),
-                                    item[13],item[14],item[15],item[16],item[17]))
+                                    item[12],item[13],item[14],item[15],item[16],item[17]))
     if len(vnInfos)<int(topnum):
         if mtype == type_new:
             records=tablemerge.getTopSTRecords(ctable, loadtime,topnum-len(vnInfos))
@@ -122,8 +118,7 @@ def getMoreRecords(web,mvid,loadtime='0',topnum=10,mtype=None,click=0):
         if records!=-1 and len(records)>0:
             for item in records:
                 vnInfos.append(NewsInfo(item[2],item[3],item[4],item[5],item[6],item[10],
-                                    time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(item[12])),
-                                    item[13],item[14],item[15],item[16],item[17]))
+                                    item[12],item[13],item[14],item[15],item[16],item[17]))
     return vnInfos
 
 # def getWordRelated(web,mvid,loadtime='0',topnum=10,mtype=None,click=0):
@@ -149,37 +144,36 @@ def getMoreRecords(web,mvid,loadtime='0',topnum=10,mtype=None,click=0):
 #     return vnInfos
 
 def getRelatedRecords(web,mvid,loadtime='0',topnum=10,mtype=None,click=0):
-    vnInfos=getESARelated(web,mvid,loadtime,topnum,mtype,click)
+    vnInfos=getW2vRelated(web,mvid,loadtime,topnum,mtype,click)
     if not vnInfos:  # if esa server is broken,then use searched related
-        vnInfos=getSearchedRelated(web,mvid,loadtime,topnum,mtype,click)  
+        vnInfos=getSearchedRelated(mvid,loadtime,topnum,mtype,click)  
         print 'using searched related'  
     return vnInfos
 
-def getESARelated(web,mvid,loadtime='0',topnum=10,mtype=None,click=0):
+def getW2vRelated(web,mvid,loadtime='0',topnum=10,mtype=None,click=0):
     vnInfos=[] 
-    rows=tablemerge.getRecordsByMVid(ctable,mvid)
+    rows=tablemerge.getTitleByMVid(ctable,mvid)
     if rows==-1 or len(rows)<1:
         return vnInfos
     title=rows[0][0]  
-    records=esaclient.getRelatedRecords2(title)
+    records=w2vclient.getRelatedRecords2(title)
     if records!=None and len(records)>0:
         for item in records:
         #0id,1webid,2vid,3title,4url,5thumb,6summary,7keywords,8newsid,9vtype,10source,
         #11related,12loadtime,13duration,14web,15mvid,16mtype,17click
-        #2mvid,3title,4url,5thumb,6brief,10source,12loadtime,13duration,14web,15mvid,16mtype,17click
+        #2vid,3title,4url,5thumb,6brief,10source,12loadtime,13duration,14web,15mvid,16mtype,17click
             # pass the same news
             if item[15]==mvid:
                 continue
             vnInfos.append(NewsInfo(item[2],item[3],item[4],item[5],item[6],item[10],
-                                    time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(item[12])),
-                                    item[13],item[14],item[15],item[16],item[17]))
+                                    item[12],item[13],item[14],item[15],item[16],item[17]))
     if len(vnInfos)>topnum:
         return vnInfos[0:topnum]    
     return vnInfos
 
 def getSearchedRelated(mvid,loadtime='0',topnum=10,mtype=None,click=0):
     vnInfos=[] 
-    rows=tablemerge.getRecordsByMVid(ctable,mvid)
+    rows=tablemerge.getTitleByMVid(ctable,mvid)
     if rows==-1 or len(rows)<1:
         return vnInfos
     title=rows[0][0]      
@@ -189,10 +183,9 @@ def getSearchedRelated(mvid,loadtime='0',topnum=10,mtype=None,click=0):
         for item in records:
             if item['mvid']==mvid:
                 continue
-            #vid,title,url,thumb,brief,source,loadtime,duration,website,mvid,mtype,click
+            #2vid,3title,4url,5thumb,6brief,10source,12loadtime,13duration,14web,15mvid,16mtype,17click
             vnInfos.append(NewsInfo(item['vid'],item['title'],item['url'],item['thumb'],item['summary'],item['source'],
-                                    time.strftime('%Y-%m-%d %H:%M:%S'.time.localtime(item['loadtime'])),
-                                    item['duration'],item['web'],item['mvid'],item['mtype'],item['click']))
+                                    item['loadtime'],item['duration'],item['web'],item['mvid'],item['mtype'],item['click']))
     if len(vnInfos)>topnum:
         return vnInfos[0:topnum]
     return vnInfos
@@ -203,8 +196,7 @@ def getSearchedPage(keywords,pagenum=1):
     records=search.searchWithPage(keywords,page=pagenum)
     if records!=None and len(records)>0:
         for item in records:
-            #vid,title,url,thumb,brief,source,loadtime,duration,website,mvid,mtype,click
+            #2vid,3title,4url,5thumb,6brief,10source,12loadtime,13duration,14web,15mvid,16mtype,17click
             vnInfos.append(NewsInfo(item['vid'],item['title'],item['url'],item['thumb'],item['summary'],item['source'],
-                                    time.strftime('%Y-%m-%d %H:%M:%S'.time.localtime(item['loadtime'])),
-                                    item['duration'],item['web'],item['mvid'],item['mtype'],item['click']))
+                                    item['loadtime'],item['duration'],item['web'],item['mvid'],item['mtype'],item['click']))
     return vnInfos

@@ -148,6 +148,12 @@ def getRecordsByIds(tablename,tids):
     rows = dbconn.Select(query, ())    
     return rows
 
+def getTitleByMVid(tablename,mvid):
+    # For related search
+    query = "SELECT title FROM " + tablename+' where mvid = %s'
+    rows = dbconn.Select(query, (mvid,))
+    return rows
+
 def getTopRecords(tablename,topnum=10,mtype=None):
 #     @attention: get top @param topnum: records from @param tablename:
 #     order by time,that is,get recent @param topnum: records  

@@ -5,7 +5,7 @@ Created on 2014-10-29
 
 @author: JohnDannl
 '''
-from sphinxapi import *
+from coreseekapi import *
 import sys, time
 import math
 
@@ -16,7 +16,7 @@ q = ''
 mode= SPH_MATCH_ANY
 # mode=SPH_MATCH_EXTENDED
 host = 'localhost'
-port = 9312
+port = 9310
 # index = '*'
 index='merge_index'
 filtercol = 'group_id'
@@ -27,7 +27,7 @@ sortby = '@weight DESC, loadtime desc'
 groupby = ''
 groupsort = '@group desc'
 limit = 0 # limit is default set to 20 unless 0<limit<16777216
-weights = {"title":1, "keywords":1}
+weights = {"title":2, "summary":1}
 
 client = SphinxClient()
 client.SetServer ( host, port )
@@ -112,6 +112,8 @@ def searchWithPage(keys,page=1):
     resList=searchWithLimit(keys,limit=500)
     total_found = len(resList)
     total_pages = math.ceil(total_found / 15.0)
+    if total_found==0:
+        return resList
     if page>total_pages:
         return None
     elif page == total_pages:
@@ -120,9 +122,9 @@ def searchWithPage(keys,page=1):
         return resList[(page-1)*15:page*15]
      
 if __name__=='__main__':
-#     keys='国民党'
+    keys='国民党'
 #     keys='2014'
-    keys='抗日英烈名录中的国民党将士'
+#     keys='抗日英烈名录中的国民党将士'
 #     search(keys)
 #     resList=searchWithLimit(keys,limit=20)
     resList=searchWithPage(keys,page=1)

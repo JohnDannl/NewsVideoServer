@@ -9,10 +9,10 @@ import sys
 sys.path.append(r'..')
 sys.path.append(r'../parser_async')
 sys.path.append(r'../database')
-# print sys.getdefaultencoding()
-# reload(sys)
-# sys.setdefaultencoding('utf-8')
-# print sys.getdefaultencoding()
+print sys.getdefaultencoding()
+reload(sys)
+sys.setdefaultencoding('utf-8')
+print sys.getdefaultencoding()
 import tornado.gen
 import tornado.httpclient
 import tornado.httpserver
@@ -30,7 +30,7 @@ from database import table
 import newsinfo
 import videoinfo
 from parser_async import china,ifeng,kankan,qq,sina,sohu,v1
-from parser_async.common import r1
+from common.common import r1
 import json
 
 define ("port", default=8889, help="run on the given port", type=int)
@@ -84,7 +84,7 @@ class NewsHandler(BaseHandler):
 #            r'related':newsinfo.getSearchedRelated
     def get(self, call):
 #         print call
-        topnum = str(self.get_argument('num', '10'))
+        topnum = self.get_argument('num', '10')
         website=str(self.get_argument('web','merge'))        
         mvid=str(self.get_argument('mvid', '0'))
         loadtime=str(self.get_argument('loadtime', '0'))

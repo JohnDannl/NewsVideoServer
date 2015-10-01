@@ -3,7 +3,7 @@
     {% for item in records %}
     <item>    	
     	<vid>{{item.vid}}</vid>
-	    <title>{{item.title}}</title>
+    	<title>{{item.title}}</title>
 	    <url>{{item.url}}</url>
 	    <thumb>{{item.thumb}}</thumb>
 		<brief>{{item.brief}}</brief>
