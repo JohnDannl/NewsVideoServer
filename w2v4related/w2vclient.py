@@ -5,6 +5,9 @@ Created on 2015-1-23
 
 @author: JohnDannl
 '''
+import sys
+sys.path.append(r'..')
+sys.path.append(r'../database')
 import socket
 from config import host,port
 from database import tablemerge,dbconfig

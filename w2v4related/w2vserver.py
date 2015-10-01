@@ -5,6 +5,9 @@ Created on 2015-1-23
 
 @author: JohnDannl
 '''
+import sys
+sys.path.append(r'..')
+sys.path.append(r'../database')
 import logging
 logging.basicConfig(format='%(asctime)s:%(levelname)s:%(message)s',level=logging.INFO)
 from gensim import corpora,models,similarities
