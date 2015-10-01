@@ -9,7 +9,8 @@ Created on 2014-9-1
 import sys
 sys.path.append(r'../')
 sys.path.append(r'../database')
-from common import getHtml,r1
+sys.path.append(r'../common')
+from common.common import getHtml,r1
 from database import table
 from database import dbconfig
 import logging

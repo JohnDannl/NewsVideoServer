@@ -8,13 +8,20 @@ Created on 2014-9-1
 import sys
 sys.path.append(r"..")
 sys.path.append(r"../database")
-from common import getHtml,r1,getHtmlwithKu6Cookie
+sys.path.append('../common')
+from common.common import getHtml,r1,getHtmlwithCookie
 from database import table
 from database import dbconfig
 import logging
 import json
-
 import xml.etree.ElementTree as ET
+
+ku6_header= [('Host', 'v.ku6.com'),
+             ('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:30.0) Gecko/20100101 Firefox/30.0'),
+             ('Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'), 
+             ('Accept-Language', 'zh-cn,zh;q=0.8,en-us;q=0.5,en;q=0.3'),
+             ('Connection', 'keep-alive'),
+             ('Referer', 'http://www.ku6.com/')] 
 
 ctable=dbconfig.tableName['china']
 suffix=[r'.m3u8',r'.mp3',r'mp4',r'.flv',r'.f4v']
@@ -43,7 +50,7 @@ def getVideoByUrl(url):
 def getKu6VideoByVid(vid):
 #     url is like:http://v.ku6.com/fetchVideo4Player/1006yPam-HwD0Azn_tkp7A...html
     url=r'http://v.ku6.com/fetchVideo4Player/'+vid+r'.html'
-    content =getHtmlwithKu6Cookie(url)
+    content =getHtmlwithCookie(url,ku6_header)
     if content:
         try:
             info=json.loads(content, encoding='utf-8')

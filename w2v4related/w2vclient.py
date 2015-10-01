@@ -30,10 +30,10 @@ def _getRelatedMids(title):
 
 def getRelatedRecords(title):
     # default return 10 most related news if has enough
-    mvids=_getRelatedMids(title)
+    mids=_getRelatedMids(title)
     records=[]
-    for mvid in mvids:
-        rows=tablemerge.getRecordsByMVid(dbconfig.mergetable,mvid)
+    for mid in mids:
+        rows=tablemerge.getRecordsById(dbconfig.mergetable,mid)
         if rows !=-1 and len(rows)>0:
             records.append(rows[0])
     return records
@@ -41,10 +41,10 @@ def getRelatedRecords(title):
 def getRelatedRecords2(title):  
     # This method is much faster than the above one
     # default return 10 most related news if has enough
-    mvids=_getRelatedMids(title)
-    mvids =['\''+mvid+'\'' for mvid in mvids]
-    mvids='('+','.join(mvids)+')'
-    rows=tablemerge.getRecordsByMVids(dbconfig.mergetable,mvids)  
+    mids=_getRelatedMids(title)
+    mids =['\''+mid+'\'' for mid in mids]
+    mids='('+','.join(mids)+')'
+    rows=tablemerge.getRecordsByIds(dbconfig.mergetable,mids)  
     if rows==-1:  
         rows=[]
     return rows
@@ -54,5 +54,5 @@ if __name__=='__main__':
     title='中科大'
     records=getRelatedRecords2(title)
     for record in records:
-        print record[2]
+        print record[3]
     print 'time cost:%s'%(str(time.time()-oldtime))

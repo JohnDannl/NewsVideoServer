@@ -5,10 +5,17 @@ Created on 2014-7-29
 
 @author: JohnDannl
 '''
-from common import getHtml,r1
+from common.common import getHtml,r1
 from database import table
 from database import dbconfig
 import logging
+
+v1_header=[('Host', 'api.v1.cn'),
+         ('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:30.0) Gecko/20100101 Firefox/30.0'),
+         ('Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'), 
+         ('Accept-Language', 'zh-cn,zh;q=0.8,en-us;q=0.5,en;q=0.3'),
+         ('Connection', 'keep-alive'),
+         ('Referer', 'http://news.v1.cn/')]  
 
 ctable=dbconfig.tableName['v1']
 

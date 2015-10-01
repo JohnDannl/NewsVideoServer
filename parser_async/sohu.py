@@ -9,7 +9,8 @@ import sys
 from gwibber.microblog.uploader.imageshack.upload import VIDEO_API_URL
 sys.path.append(r'..')
 sys.path.append(r'../database')
-from common import getHtml,r1
+sys.path.append(r'../common')
+from common.common import getHtml,r1
 from database import table
 from database import dbconfig
 import json
