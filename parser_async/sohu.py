@@ -6,7 +6,6 @@ Created on 2014-9-2
 @author: JohnDannl
 '''
 import sys
-from gwibber.microblog.uploader.imageshack.upload import VIDEO_API_URL
 sys.path.append(r'..')
 sys.path.append(r'../database')
 sys.path.append(r'../common')
