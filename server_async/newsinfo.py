@@ -171,13 +171,13 @@ def getW2vRelated(web,mvid,loadtime='0',topnum=10,mtype=None,click=0):
         return vnInfos[0:topnum]    
     return vnInfos
 
-def getSearchedRelated(mvid,loadtime='0',topnum=10,mtype=None,click=0):
+def getSearchedRelated(web,mvid,loadtime='0',topnum=10,mtype=None,click=0):
     vnInfos=[] 
     rows=tablemerge.getTitleByMVid(ctable,mvid)
     if rows==-1 or len(rows)<1:
         return vnInfos
     title=rows[0][0]      
-    #print title  
+#     print title  
     records=search.searchWithLimit(title,limit=topnum+1)
     if records!=None and len(records)>0:
         for item in records:
