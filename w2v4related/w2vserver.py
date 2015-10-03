@@ -68,8 +68,8 @@ def update():
             reindex()
             reloadmodel()  
             lock.release()   
-            isReady=True       
-            print "reindex at time:",time.asctime(),'time cost (s):',str(time.time()-oldtime)
+            print "reindex at time:",time.asctime(),'time cost (s):',str(time.time()-oldtime)        
+        isReady=True       
         time.sleep(7200)
     
 def server_listen():
