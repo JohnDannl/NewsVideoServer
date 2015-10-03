@@ -26,8 +26,9 @@ def _getRelatedMids(title):
             rec_buffer.append(data)
         s.close()
     except:
-        s.close()
         print 'client socket error'
+    finally:        
+        s.close()
     #print 'Received', repr(''.join(rec_buffer))
     return ''.join(rec_buffer).split(',')
 
@@ -45,7 +46,7 @@ def getRelatedRecords2(title):
     # This method is much faster than the above one
     # default return 10 most related news if has enough
     mids=_getRelatedMids(title)
-    if not mids:
+    if len(mids)<=1:
         return []
     mids =['\''+mid+'\'' for mid in mids]
     mids='('+','.join(mids)+')'

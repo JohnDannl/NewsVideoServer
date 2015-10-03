@@ -70,7 +70,7 @@ def update():
         lock.release()   
         isReady=True       
         print "reindex at time:",time.asctime(),'time cost (s):',str(time.time()-oldtime)
-        time.sleep(60)
+        time.sleep(7200)
     
 def server_listen():
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

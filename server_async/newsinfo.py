@@ -146,7 +146,7 @@ def getMoreRecords(web,mvid,loadtime='0',topnum=10,mtype=None,click=0):
 def getRelatedRecords(web,mvid,loadtime='0',topnum=10,mtype=None,click=0):
     vnInfos=getW2vRelated(web,mvid,loadtime,topnum,mtype,click)
     if not vnInfos:  # if esa server is broken,then use searched related
-        vnInfos=getSearchedRelated(mvid,loadtime,topnum,mtype,click)  
+        vnInfos=getSearchedRelated(web,mvid,loadtime,topnum,mtype,click)  
         print 'using searched related'  
     return vnInfos
 
