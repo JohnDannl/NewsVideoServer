@@ -45,6 +45,8 @@ def getRelatedRecords2(title):
     # This method is much faster than the above one
     # default return 10 most related news if has enough
     mids=_getRelatedMids(title)
+    if not mids:
+        return []
     mids =['\''+mid+'\'' for mid in mids]
     mids='('+','.join(mids)+')'
     rows=tablemerge.getRecordsByIds(dbconfig.mergetable,mids)  

@@ -20,6 +20,8 @@ from database import tablew2v,tablemerge,dbconfig
 from w2v4related import doc2vec,vec2index
 
 index=None
+isReady=False
+lock=threading.Lock()
 mids=[]
 if os.path.exists(index_file):    
     index = similarities.Similarity.load(index_file)
@@ -43,28 +45,32 @@ def addNewCorpus():
         tablew2v.InsertItemFast(dbconfig.w2vtable, data)
     return True
   
-def reindex():    
+def reindex():     
     vec2index.index_latest()
 
 def reloadmodel(): 
     if not os.path.exists(index_file):
         return 
     global index,mids
-    index=None     
     index = similarities.Similarity.load(index_file) 
     mids=[]
     for line in open(ids_file):
-        mids.append(line.strip())   
+        mids.append(line.strip())  
            
 def update():
     while True:
         oldtime=time.time()
-        global index
-        if addNewCorpus() or not index: # add new corpus or index does not exist
-            reindex()
-            reloadmodel()
+        global index,isReady,lock
+#         if addNewCorpus() or not index: # add new corpus or index does not exist               
+        isReady=False              
+        lock.acquire()                
+        index=None 
+        reindex()
+        reloadmodel()  
+        lock.release()   
+        isReady=True       
         print "reindex at time:",time.asctime(),'time cost (s):',str(time.time()-oldtime)
-        time.sleep(7200)
+        time.sleep(60)
     
 def server_listen():
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -80,13 +86,24 @@ def process_query(sock,addr):
     data = sock.recv(4096)
     #print data
     global index,mids
-    if not index:
-        print 'index is none'
+    if not isReady:
+        print 'index is not ready'
         sock.sendall('')
         sock.close()
         return
     vec=doc2vec.get_vec(data)
-    sims=index[vec]
+    lock.acquire()
+    try:
+        if not index:
+            print 'index is none'
+            sock.sendall('')
+            sock.close()        
+            return        
+        sims=index[vec]
+    except:
+        pass
+    finally:
+        lock.release()
     sim_midstr=','.join([mids[item[0]] for item in sims])
     sock.sendall(sim_midstr)
     sock.close()
