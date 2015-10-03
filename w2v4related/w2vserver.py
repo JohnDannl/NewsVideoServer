@@ -61,15 +61,15 @@ def update():
     while True:
         oldtime=time.time()
         global index,isReady,lock
-#         if addNewCorpus() or not index: # add new corpus or index does not exist               
-        isReady=False              
-        lock.acquire()                
-        index=None 
-        reindex()
-        reloadmodel()  
-        lock.release()   
-        isReady=True       
-        print "reindex at time:",time.asctime(),'time cost (s):',str(time.time()-oldtime)
+        if addNewCorpus() or not index: # add new corpus or index does not exist               
+            isReady=False              
+            lock.acquire()                
+            index=None 
+            reindex()
+            reloadmodel()  
+            lock.release()   
+            isReady=True       
+            print "reindex at time:",time.asctime(),'time cost (s):',str(time.time()-oldtime)
         time.sleep(7200)
     
 def server_listen():
