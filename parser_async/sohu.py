@@ -40,7 +40,7 @@ def getVideoByUrl(url):
     if re.match(r'http://share.vrs.sohu.com', url):
         vid = r1('id=(\d+)', url)
     else:
-        html = getHtml(url)
+        html = getHtml(url)#.decode('gbk')
         vid = r1(r'\Wvid\s*[\:=]\s*[\'"]?(\d+)[\'"]?', html)
     assert vid
 
